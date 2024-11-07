@@ -1,0 +1,47 @@
+<core:FragmentDefinition xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:macros="sap.fe.macros" xmlns:upload="sap.m.upload">
+	<VBox core:require="{ handler: 'ust/pr/purchaserequisition/ext/fragment/UploadSet'}">
+		<upload:UploadSet
+				id="UploadSet"
+				instantUpload="true"
+				showIcons="true"
+				uploadEnabled="true"
+				terminationEnabled="true"
+				fileTypes="txt,doc,png,json,jpg"
+				maxFileNameLength="30"
+				maxFileSize="20000"
+				mediaTypes = "text/plain,application/msword,image/png,image/jpg,application/json"
+
+				items="{
+                    path: '/MediaFile'
+                }"
+				mode="MultiSelect"				
+				selectionChanged="handler.onSelectionChange"
+				beforeItemAdded="handler.onBeforeItemAdded"
+				afterItemAdded="handler.onAfterItemAdded"
+				afterItemRemoved="handler.onAfterItemRemoved"
+				>
+			<upload:toolbar>
+				<OverflowToolbar>
+					<ToolbarSpacer/>
+					<Button
+							id="downloadSelectedButton"
+							text="Download selected"
+							press="handler.onDownloadSelectedButton"/>
+					<Button
+							id="versionButton"
+							enabled="false"
+							text="Upload a new version"
+							press="handler.onVersionUpload"/>
+					<upload:UploadSetToolbarPlaceholder />
+				</OverflowToolbar>
+			</upload:toolbar >
+			<upload:items >
+				<upload:UploadSetItem
+						fileName="{fileName}"
+						mediaType="{mediaType}"
+						url="{url}">						
+				</upload:UploadSetItem>
+			</upload:items>
+		</upload:UploadSet>
+	</VBox>
+</core:FragmentDefinition>

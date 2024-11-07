@@ -1,0 +1,191 @@
+{
+  "_version": "1.65.0",
+  "sap.app": {
+    "id": "ust.pr.purchaserequisition",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:lrop",
+      "version": "1.15.3",
+      "toolsId": "637d1970-1888-40fa-9bfc-1a62feba175d"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/purchase-req/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.0"
+        }
+      }
+    },
+    "crossNavigation": {
+      "inbounds": {
+        "PurchaseReq-manage": {
+          "semanticObject": "PurchaseReq",
+          "action": "manage",
+          "title": "{{flpTitle}}",
+          "signature": {
+            "parameters": {},
+            "additionalParameters": "allowed"
+          }
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": true,
+    "dependencies": {
+      "minUI5Version": "1.130.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {},
+        "sap.fe.templates": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "ust.pr.purchaserequisition.i18n.i18n"
+        }
+      },
+      "": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      },
+      "@i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": []
+    },
+    "routing": {
+      "config": {},
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "PurchaseRequisitionList",
+          "target": "PurchaseRequisitionList"
+        },
+        {
+          "pattern": "PurchaseRequisition({key}):?query:",
+          "name": "PurchaseRequisitionObjectPage",
+          "target": "PurchaseRequisitionObjectPage"
+        },
+        {
+          "pattern": "PurchaseRequisition({key})/Items({key2}):?query:",
+          "name": "PurchaseRequisitionItemObjectPage",
+          "target": "PurchaseRequisitionItemObjectPage"
+        }
+      ],
+      "targets": {
+        "PurchaseRequisitionList": {
+          "type": "Component",
+          "id": "PurchaseRequisitionList",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "contextPath": "/PurchaseRequisition",
+              "variantManagement": "Page",
+              "navigation": {
+                "PurchaseRequisition": {
+                  "detail": {
+                    "route": "PurchaseRequisitionObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "@com.sap.vocabularies.UI.v1.LineItem": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "PurchaseRequisitionObjectPage": {
+          "type": "Component",
+          "id": "PurchaseRequisitionObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/PurchaseRequisition",
+              "navigation": {
+                "Items": {
+                  "detail": {
+                    "route": "PurchaseRequisitionItemObjectPage"
+                  }
+                }
+              },
+              "content": {
+                "body": {
+                  "sections": {
+                    "UploadSet": {
+                      "template": "ust.pr.purchaserequisition.ext.fragment.UploadSet",
+                      "position": {
+                        "placement": "After",
+                        "anchor": "GeneratedFacet1"
+                      },
+                      "title": "Attachments"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "PurchaseRequisitionItemObjectPage": {
+          "type": "Component",
+          "id": "PurchaseRequisitionItemObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/PurchaseRequisition/Items"
+            }
+          }
+        }
+      }
+    }
+  },
+  "sap.fiori": {
+    "registrationIds": [],
+    "archeType": "transactional"
+  }
+}
