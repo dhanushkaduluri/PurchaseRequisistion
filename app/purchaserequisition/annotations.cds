@@ -172,9 +172,74 @@ annotate service.PurchaseRequisitionItem with @(
     UI.Facets : [
         {
             $Type : 'UI.ReferenceFacet',
-            ID : 'ItemDetailsFacet',
-            Label : 'Item Details',
-            Target : '@UI.LineItem#PurchaseRequisitionItems'
-        }
-    ]
+            Label : 'General Information',
+            ID : 'GeneralInformation',
+            Target : '@UI.FieldGroup#GeneralInformation',
+        },
+    ],
+    UI.FieldGroup #GeneralInformation : {
+        $Type : 'UI.FieldGroupType',
+        Data : [
+            {
+                $Type : 'UI.DataField',
+                Value : Material,
+                Label : 'Material',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : MaterialDescription,
+                Label : 'MaterialDescription',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : Parent_UUID,
+                Label : 'Parent_UUID',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : Plant,
+                Label : 'Plant',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : Price,
+                Label : 'Price',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PurOrg,
+                Label : 'PurOrg',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : Quantity,
+                Label : 'Quantity',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : ReqItemNo,
+                Label : 'ReqItemNo',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : UoM,
+                Label : 'UoM',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : Status,
+                Label : 'Status',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : UUID,
+                Label : 'UUID',
+            },
+            {
+                $Type : 'UI.DataField',
+                Value : PRItemNumber,
+                Label : 'PRItemNumber',
+            },
+        ],
+    },
 );

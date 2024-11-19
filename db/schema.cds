@@ -1,9 +1,9 @@
 namespace ust.db;
+using { cuid } from '@sap/cds/common';
 
-@AbapCatalog.sqlViewName: 'ZPR_HEADER'
-@EndUserText.label: 'Purchase Requisition Header'
-entity PurchaseRequisition {
-    key UUID           : UUID;
+
+
+entity PurchaseRequisition : cuid{
     PRNumber           : String(10);
     PRType             : String;
     StatusCode         : String; // Association to Status
@@ -19,8 +19,7 @@ entity PurchaseRequisition {
     _Attachments       : Composition of many MediaFile on _Attachments.PurchaseHeader = $self;
 }
 
-@AbapCatalog.sqlViewName: 'ZPR_ITEM'
-@EndUserText.label: 'Purchase Requisition Item'
+
 entity PurchaseRequisitionItem {
     key UUID                 : UUID;
     Parent             : Association to PurchaseRequisition;
@@ -40,9 +39,8 @@ entity PurchaseRequisitionItem {
     ReqItemNo              : String;
 }
 
-@AbapCatalog.sqlViewName: 'ZMEDIA_FILE'
-@EndUserText.label: 'Media File'
-entity MediaFile {
+
+entity MediaFile  {
     key id        : UUID;
     PurchaseHeader              : Association to PurchaseRequisition;
     @Core.ContentDisposition.Type: 'inline'

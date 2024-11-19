@@ -1,6 +1,10 @@
 sap.ui.define([
-    "sap/m/MessageToast"
-], function(MessageToast) {
+    "sap/m/MessageToast",
+    "sap/ui/core/mvc/Controller",
+	"sap/ui/core/Item",
+	"sap/m/upload/Uploader",
+    "sap/m/MessageBox",
+], function(MessageToast, Item, MessageBox) {
     'use strict';
 
     return {
@@ -10,18 +14,14 @@ sap.ui.define([
         
             // Access the model from the upload set
             const oDataModel = oUploadSet.getModel();
+            const sHeaderId = this.getBindingContext()?.getObject()?.ID;
         
             // Store file metadata
             this.fileName = oItem.getFileName();
             this.mediaType = oItem.getMediaType();
             this.size = oItem.getFileObject().size;
         
-            const reader = new FileReader();
-        
-            reader.onload = async (e) => {
-                // Get binary data as an ArrayBuffer
-                const binaryData = e.target.result;
-                const byteArray = new Uint8Array(binaryData);
+            
         
                 const sServiceUrl = oDataModel.sServiceUrl;
         
@@ -29,51 +29,44 @@ sap.ui.define([
                 const oUploadData = {
                     mediaType: this.mediaType,
                     fileName: this.fileName,
-                    size: this.size,
+                    size: this.size,    
                 };
         
-                try {
-                    // Perform the Fetch POST request to create the media record
-                    const postResponse = await fetch(`${sServiceUrl}MediaFile`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(oUploadData),
-                    });
-        
-                    if (!postResponse.ok) {
-                        throw new Error("POST request failed.");
-                    }
-        
-                    const postData = await postResponse.json();
-                    const mediaId = postData.id; // Get the ID of the newly created media
-        
-                    // Now prepare to update the content with a PUT request
-                    const putResponse = await fetch(`${sServiceUrl}MediaFile(${mediaId})/content`, {
-                        method: 'PUT',
-                        body: byteArray, // Updated content
-                    });
-        
-                    if (!putResponse.ok) {
-                        throw new Error("PUT request failed.");
-                    }
-        
-                    console.log("Media content updated successfully.");
-                    oDataModel.refresh(true);
-                } catch (error) {
-                    console.log("fileUploadErr", error.message || "Upload failed.");
-                }
-            };
-        
-            // Read the file as an ArrayBuffer (triggers the onload event)
-            if (oItem._oFileObject) {
-                reader.readAsArrayBuffer(oItem._oFileObject);
-            } else {
-                console.log("No file object found");
-            }
-        }
-,        
+                const oSettings = {
+                    url: `${sServiceUrl}PurchaseRequisition(ID=${sHeaderId},IsActiveEntity=true)/_Attachments`,
+                    method: "POST",
+                    headers: {
+                        "Content-type": "application/json",
+                        'X-CSRF-Token' : oDataModel.getHttpHeaders()["X-CSRF-Token"]
+                    },
+                    data: JSON.stringify(oUploadData)
+                };
+    
+                await new Promise((resolve, reject) => {
+                    $.ajax(oSettings)
+                        .done((results, textStatus, request) => {
+                            resolve(results.id);
+                        })
+                        .fail((error) => {
+                            reject(error);
+                        })
+                })
+                .then((id) => {
+                    const url = `${sServiceUrl}PurchaseRequisition(ID=${sHeaderId},IsActiveEntity=false)/_Attachments(id=${id},IsActiveEntity=false)/content`;
+                    oItem.setUploadUrl(url);
+                    oUploadSet.setHttpRequestMethod("PUT");
+                    oUploadSet.addHeaderField(new Item({
+                        key: 'X-CSRF-Token',
+                        text: oDataModel.getHttpHeaders()["X-CSRF-Token"]
+                    }));
+                    oUploadSet.uploadItem(oItem);
+                })
+                .catch((error) => {
+                    MessageBox.error(i18n.getText("fileUploadErr", error.responseJSON.error.message));
+                })
+                
+           
+        },      
        
         onDownloadSelectedButton: function () {
             var oUploadSet = this.byId("UploadSet");

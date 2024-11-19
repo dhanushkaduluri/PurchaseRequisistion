@@ -8,8 +8,6 @@ service PurchaseReq {
     @odata.draft.enabled : true
     entity PurchaseRequisition as projection on db.PurchaseRequisition{
         *,
-        Items,
-        _Attachments,
         case StatusCode
             when 'A' then 'inApproval'
             when 'O' then 'Ordered'
@@ -44,5 +42,6 @@ service PurchaseReq {
     };
 
     // Expose the Media File entity
+    
     entity MediaFile as projection on db.MediaFile;
 }

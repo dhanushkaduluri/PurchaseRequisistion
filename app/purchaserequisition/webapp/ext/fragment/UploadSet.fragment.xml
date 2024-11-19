@@ -12,7 +12,7 @@
 				mediaTypes = "text/plain,application/msword,image/png,image/jpg,application/json"
 
 				items="{
-                    path: '/MediaFile'
+                    path: '_Attachments'
                 }"
 				mode="MultiSelect"				
 				selectionChanged="handler.onSelectionChange"
