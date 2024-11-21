@@ -41,7 +41,7 @@ entity PurchaseRequisitionItem {
 
 
 entity MediaFile  {
-    key id        : UUID;
+    key id        : String;
     PurchaseHeader              : Association to PurchaseRequisition;
     @Core.ContentDisposition.Type: 'inline'
     @Core.MediaType: mediaType
